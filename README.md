@@ -1,6 +1,3 @@
-FORMAT: 1A
-HOST: http://polls.apiblueprint.org/
-
 # BBPOS - SDK Integration
 SDK for integrating with the BBPOS Device, within Android Application.
 
