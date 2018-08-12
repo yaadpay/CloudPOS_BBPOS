@@ -324,8 +324,8 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
 | id | Unique Id record in YaadPayments database - Used for getting full transaction details from Yaad servers | 38931 |
 | tranRecord | SHVA Tran record  | MTcxMjI2MTAxMDM2MDg4MjI4NjI4OTG0G4Ca+PgcaPJ78E2IWsOCVsvMVRm530qXPwLXbFPf23pRZmW8G4BIIj\/ivsKSgrAEOtctPtAw9OBwPIAlYzxS1bxo953O0XAVuPasZDcjHlkOjCmc38ldTqZyxPoJzCiPRmp1M0sF8QVaF95DlaqaGsYJz0+y\/0ESgdcxIhl0FDZhhUNkI7yusnz0LfMitv5Mmh8dPOqcMLzgKJgcc+pduYZrs+KP\/8gOE2QuzhubMpTbMPiJJ6USeDRBMS8fjfxGQ851hL9Js9CAfkNr1NiT6KDf6nQJRCNAg+U2KzAwUJ8T77swRuepODRL+Y\/fHh9DMROnkVQIrA5XgA== |
 | SOAPAction | The action that was performed in the web-transaction | AshFull / AshEnd |
-| WSKEY | WebSocket Key - Used for getting bucket of transactions from Yaad servers | 3BA6B7465E611EEEE1DDBD43DC2563C7B05188874917EBFAB61AA77D2BEE0649 |
-|yaadObj.XXX | Unique param that can be passed within the HashMap in the initialize transaction and pass along with the transaction - Usage: Client info [id, name, email etc'] and will be shown in the result (without changes) | yaadObj.id="205654912",<br> yaadObj.name="TEST",<br> yaadObj.email="test@testserver.com",<br> yaadObj.XXX =... etc'  |
+| WSKEY | WebSocket Key - Used for getting bucket of transactions from Yaad servers | |3BA6B7465E611EEEE1DDBD43DC2563C7B05188874917EBFAB61AA77D2BEE0649 |
+|yaadObj.XXX | Unique param that can be passed within the HashMap in the initialize transaction and pass along with the |transaction - Usage: Client info [id, name, email etc'] and will be shown in the result (without changes) | |yaadObj.id="205654912",<br> yaadObj.name="TEST",<br> yaadObj.email="test@testserver.com",<br> yaadObj.XXX =... etc'  |
 
 <br>
 ### Load Params 
