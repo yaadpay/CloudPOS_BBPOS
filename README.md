@@ -12,11 +12,11 @@ SDK for integrating with the BBPOS Device, within Android Application.
     * [Javadoc functions](#javadoc-functions)
     * [Declaration](#declaration)
     * [Initilaize callback](#initilaize-callback)
-    * [onCreate - Attach callbacks](#attach-callbacks)
-    * [onResume - Re-attach callbacks](#declaration)
-    * [Search & Connect BT](#search-&-connec)
+    * [onCreate - Attach callbacks](#oncreate)
+    * [onResume - Re-attach callbacks](#onresume)
+    * [Search & Connect BT](#search-&-connect)
     * [Start EMV](#startamoun)
-    * [Load Params](#load-param)
+    * [Load Params](#load-params)
     
 
 
