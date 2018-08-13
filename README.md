@@ -38,7 +38,7 @@ SDK for integrating with the BBPOS Device, within Android Application.
         ```
 
 ## Downloads
-- BBPos SDK AAR - - [Download Here](https://yaadpay.docs.apiary.io)
+- BBPos SDK AAR - [Download Here](https://yaadpay.yaad.net)
 
 ## Installation
 Place the AAR under :
