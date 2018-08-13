@@ -129,7 +129,7 @@ public class MainActivity extends Activity implements BBPosCallback
 }
 ```
 - <strong>onBTResponse</strong> - Callback notifier for the Bluetooth state.
-- <strong>getTokenFromServer:</strong> In order to get the token you need to make a Request to our server: <br> [Get Token From Server API](https://yaadpay.docs.apiary.io).
+- <strong>getTokenFromServer:</strong> In order to get the token you need to make a Request to our server: <br> [Get Token From Server API](https://yaadpay.yaad.net).
 
 #### Bluetooth Callback Parameters 
 
