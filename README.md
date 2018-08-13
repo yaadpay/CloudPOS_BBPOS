@@ -17,7 +17,7 @@ SDK for integrating with the BBPOS Device, within Android Application.
     * [Search & Connect BT](#search--connect-bt)
     * [Start EMV](#startamount)
     * [Load Params](#load-params)
-    
+* [FAQ](#faq)    
 
 
 ## Requirement
