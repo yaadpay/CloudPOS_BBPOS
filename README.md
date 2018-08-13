@@ -1,7 +1,9 @@
 # BBPOS - SDK Integration
 SDK for integrating with the BBPOS Device, within Android Application. 
 <br>
-<div style="text-align:center"><img src="https://yaadpay.yaad.net/wp-content/uploads/2018/07/mpospinpad-260x300.png" > </img><div>
+<p align="center">
+<img src="https://yaadpay.yaad.net/wp-content/uploads/2018/07/mpospinpad-260x300.png" />
+</p>
 <br>
 ## Table of contents
 * [Requirements](#requirements)
