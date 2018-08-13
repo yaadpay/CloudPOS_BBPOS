@@ -320,7 +320,7 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
 | ------ | ------ | ------ |
 | uid | SHVA UID for this transaction| 17122610103608822862891 |
 | LastAction | Was the last action success or not | True / False |
-| ashStatusDes | Description of the transacion result, according to SHVA Document | "תקין" - for success (0) <br> "שגיאה בחיבור לשבא" for connection to shva lost (999)<br>... etc'|
+| ashStatusDes | Description of the transacion result, according to SHVA Document | "תקין" - for success (0) <br> "שגיאה בחיבור לשבא" for connection to shva lost (999)<br>... etc'<br> Full list can be found - [HERE](https://yaadpay.docs.apiary.io/#introduction/error-codes/shva-error-codes-ashrayit-96-hebrew) |
 | id | Unique Id record in YaadPayments database - Used for getting full transaction details from Yaad servers | 38931 |
 | tranRecord | SHVA Tran record  | MTcxMjI2MTAxMDM2MDg4MjI4NjI4OTG0G4Ca+PgcaPJ78E2IWsOCVsvMVRm530qXPwLXbFPf23pRZmW8G4BIIj\/ivsKSgrAEOtctPtAw9OBwPIAlYzxS1bxo953O0XAVuPasZDcjHlkOjCmc38ldTqZyxPoJzCiPRmp1M0sF8QVaF95DlaqaGsYJz0+y\/0ESgdcxIhl0FDZhhUNkI7yusnz0LfMitv5Mmh8dPOqcMLzgKJgcc+pduYZrs+KP\/8gOE2QuzhubMpTbMPiJJ6USeDRBMS8fjfxGQ851hL9Js9CAfkNr1NiT6KDf6nQJRCNAg+U2KzAwUJ8T77swRuepODRL+Y\/fHh9DMROnkVQIrA5XgA== |
 | SOAPAction | The action that was performed in the web-transaction | AshFull / AshEnd |
@@ -406,10 +406,10 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
 
 ### Load params error status
     
-    Most of the status that there is except (900) are coming directly from SHVA.<br>
-    Therefore:<br>
+    Most of the status that there is except (900) are coming directly from SHVA.
+    Therefore:
     Status: 999 Means no communication to SHVA
-    
+    Full list can be found [Here](https://yaadpay.docs.apiary.io/#introduction/error-codes/shva-error-codes-ashrayit-96-hebrew)
   
 ### Does the load parameters screen can be modified?
 
@@ -418,12 +418,12 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
 ### How my server will be notified with the transaction's result?
 
     There are two ways to be notified:
-- <strong> Server-To-Server: </strong> By passing in the initiate transaction Hash the yaadOb.notify and yaadObj.norifyUrl you can be notified directly from our server to the specific url you choose for the response. <strong>[Highly recommanded]</strong> <br>
-    
+- <strong> Server-To-Server: </strong> By passing in the initiate transaction Hash the yaadOb.notify and yaadObj.norifyUrl you can be notified directly from our server to the specific url you choose for the response. <strong>
+   [Highly recommanded]</strong> 
 ```
-    hash.put("yaadObj.notify", "url"); 
+   hash.put("yaadObj.notify", "url"); 
     
-    hash.put("yaadObj.notifyURL", "http://www.mysite.com/emv_trans.php?id=1234");
+   hash.put("yaadObj.notifyURL", "http://www.mysite.com/emv_trans.php?id=1234");
 ```
 - <strong> App-To-Server </strong>
     At the end of the transaction the caller Activity will receive the Transaction's response and the send it to the sever. <strong>NOTE: in case of a crush / Exit application without saving the response locally the transacion will be lost.</stong>
