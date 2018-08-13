@@ -4,7 +4,7 @@
 
 <p align="center">
 <img src="https://yaadpay.yaad.net/wp-content/uploads/2018/07/mpospinpad-260x300.png" />
-<img src="https://yaadpay.yaad.net/wp-content/uploads/2018/07/credit_card_icons.png"> />
+<img src="https://yaadpay.yaad.net/wp-content/uploads/2018/07/credit_card_icons.png"/>
 </p>
 SDK for integrating with the BBPOS Device, within Android Application. 
 <br>
