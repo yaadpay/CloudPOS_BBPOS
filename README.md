@@ -1,7 +1,6 @@
 # BBPOS - SDK Integration
 
 <br>
-[![Watch the video](https://raw.github.com/GabLeRoux/WebMole/master/ressources/WebMole_Youtube_Video.png)](http://youtu.be/vt5fpE0bzSY)
 
 <p align="center">
 <img src="https://yaadpay.yaad.net/wp-content/uploads/2018/07/mpospinpad-260x300.png" />
