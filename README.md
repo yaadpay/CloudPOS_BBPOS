@@ -405,9 +405,12 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
 ### Connecting to bluetooth shows a scan in the logs, but connection never made what to do?
 Run *SDK MANAGER* from the android studio,  *SDK Platforms*, Check *Show Package Details* 
 and install / update the following : <br> <br> 
-"*Android SDK Platform XX*"<br> 
-"*Sources for Android XX*" <br><br> 
+```
+"*Android SDK Platform XX*"
+"*Sources for Android XX*"  
+
 XX = targetSdkVersion
+```
 
 ### In the load parameters screen I get Error(900)
 
