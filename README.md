@@ -1,7 +1,7 @@
 # BBPOS - SDK Integration
 
 <br>
-![asciicast](https://asciinema.org/a/42383.png)](https://asciinema.org/a/42383)
+
 <p align="center">
 <img src="https://yaadpay.yaad.net/wp-content/uploads/2018/07/mpospinpad-260x300.png" />
 </p>
