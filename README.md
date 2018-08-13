@@ -231,7 +231,7 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
         connectBt();
     }
 ```
-### Search & Connect 
+### Search & Connect BT
 ```java
     private void connectBt()
     {
