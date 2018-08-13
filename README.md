@@ -1,4 +1,4 @@
-# BBPOS - SDK Integration
+# Yaad Payments - BBPOS WisePad2 - SDK Integration
 
 <br>
 
@@ -53,7 +53,7 @@ SDK for integrating with the BBPOS Device, within Android Application.
         ```
 
 ## Downloads
-- BBPos SDK AAR - [Download Here](https://yaadpay.yaad.net)
+- BBPos SDK AAR - [Download Here](https://github.com/yaadpay/CloudPOS_BBPOS/archive/0.1.zip)
 
 ## Installation
 Place the AAR under :
