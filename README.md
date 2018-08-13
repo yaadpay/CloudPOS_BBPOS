@@ -403,16 +403,15 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
 
 ## FAQ
 ### Connecting to bluetooth shows a scan in the logs, but connection never made what to do?
-
-  Run *SDK MANAGER* from the android studio,  *SDK Platforms*, Check *Show Package Details* 
-  and install / update the following : <br> <br> 
-  "*Android SDK Platform XX*"<br> 
-  "*Sources for Android XX*" <br><br> 
-  XX = targetSdkVersion
+Run *SDK MANAGER* from the android studio,  *SDK Platforms*, Check *Show Package Details* 
+and install / update the following : <br> <br> 
+"*Android SDK Platform XX*"<br> 
+"*Sources for Android XX*" <br><br> 
+XX = targetSdkVersion
 
 ### In the load parameters screen I get Error(900)
 
-  It means that the token that was provided is invalid or not provided at all.
+It means that the token that was provided is invalid or not provided at all.
 
 ### Load params error status
 
@@ -426,8 +425,7 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
     Yes, the screen can be modified via params that we define in our server <br>  i.e. Logo, Background color, Text Colors.
     
 ### How my server will be notified with the transaction's result?
-
-    There are two ways to be notified:
+There are two ways to be notified:
 - <strong> Server-To-Server: </strong> By passing in the initiate transaction Hash the yaadOb.notify and yaadObj.norifyUrl you can be notified directly from our server to the specific url you choose for the response. <strong>
    [Highly recommanded]</strong> 
 ```
