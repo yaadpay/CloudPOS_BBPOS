@@ -320,7 +320,7 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
 | ------ | ------ | ------ |
 | uid | SHVA UID for this transaction| 17122610103608822862891 |
 | LastAction | Was the last action success or not | True / False |
-| ashStatusDes | Description of the transacion result, according to SHVA Document | "תקין" - for success (0) <br> "שגיאה בחיבור לשבא" for connection to shva lost (999)<br>... etc'<br> Full list can be found - [HERE](https://yaadpay.docs.apiary.io/#introduction/error-codes/shva-error-codes-ashrayit-96-hebrew) |
+| ashStatusDes | Description of the transacion result, according to SHVA Document | "תקין" - for success (0) <br> "שגיאה בחיבור לשבא" for connection to shva lost (999)<br>... etc'<br> Full list can be found - [HERE](https://yaadpay.docs.apiary.io/#introduction/error-codes/shva-error-codes-ashrayit-emv-hebrew) |
 | id | Unique Id record in YaadPayments database - Used for getting full transaction details from Yaad servers | 38931 |
 | tranRecord | SHVA Tran record  | MTcxMjI2MTAxMDM2MDg4MjI4NjI4OTG0G4Ca+PgcaPJ78E2IWsOCVsvMVRm530qXPwLXbFPf23pRZmW8G4BIIj\/ivsKSgrAEOtctPtAw9OBwPIAlYzxS1bxo953O0XAVuPasZDcjHlkOjCmc38ldTqZyxPoJzCiPRmp1M0sF8QVaF95DlaqaGsYJz0+y\/0ESgdcxIhl0FDZhhUNkI7yusnz0LfMitv5Mmh8dPOqcMLzgKJgcc+pduYZrs+KP\/8gOE2QuzhubMpTbMPiJJ6USeDRBMS8fjfxGQ851hL9Js9CAfkNr1NiT6KDf6nQJRCNAg+U2KzAwUJ8T77swRuepODRL+Y\/fHh9DMROnkVQIrA5XgA== |
 | SOAPAction | The action that was performed in the web-transaction | AshFull / AshEnd |
@@ -405,12 +405,12 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
   It means that the token that was provided is invalid or not provided at all.
 
 ### Load params error status
-    
-    Most of the status that there is except (900) are coming directly from SHVA.
-    Therefore:
-    Status: 999 Means no communication to SHVA
-    Full list can be found [Here](https://yaadpay.docs.apiary.io/#introduction/error-codes/shva-error-codes-ashrayit-96-hebrew)
-  
+
+      Most of the status that there is except (900) are coming directly from SHVA.
+      Therefore:
+      Status: 999 Means no communication to SHVA
+<strong>NOTE: </strong>Full list can be found 
+[Here](https://yaadpay.docs.apiary.io/#introduction/error-codes/shva-error-codes-ashrayit-emv-hebrew)
 ### Does the load parameters screen can be modified?
 
     Yes, the screen can be modified via params that we define in our server <br>  i.e. Logo, Background color, Text Colors.
