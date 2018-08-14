@@ -386,6 +386,7 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
     
 ```
 #### loadParams - function
+
 | Parameter | Description | Example |
 | ------ | ------ | ------ |
 | Context context | Callback reference | MainActivity.this |
