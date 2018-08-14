@@ -5,6 +5,10 @@
 <p align="center">
 <img src="https://yaadpay.yaad.net/wp-content/uploads/2018/07/mpospinpad-260x300.png" />
 </p>
+
+<div style="width: 100%; height: 0px; position: relative; padding-bottom: 56.250%;"><iframe src="https://streamable.com/s/gj2lw/fgcsvc" frameborder="0" width="100%" height="100%" allowfullscreen style="width: 100%; height: 100%; position: absolute;"></iframe></div>
+
+
 <br>
 <br>
 SDK for integrating with the BBPOS Device, within Android Application. 
