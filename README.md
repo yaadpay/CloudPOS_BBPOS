@@ -457,7 +457,7 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
 
 <br> 
 
-#### LoadParam - ScreenShoot
+#### Load Params Screenshot
 <img alt="not found" src=""/>
 <br> 
 
