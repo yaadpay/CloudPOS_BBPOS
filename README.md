@@ -6,9 +6,6 @@
 <img src="https://yaadpay.yaad.net/wp-content/uploads/2018/07/mpospinpad-260x300.png" />
 </p>
 
-<div style="width: 100%; height: 0px; position: relative; padding-bottom: 56.250%;"><iframe src="https://streamable.com/s/gj2lw/fgcsvc" frameborder="0" width="100%" height="100%" allowfullscreen style="width: 100%; height: 100%; position: absolute;"></iframe></div>
-
-
 <br>
 <br>
 SDK for integrating with the BBPOS Device, within Android Application. 
@@ -129,7 +126,7 @@ public class MainActivity extends Activity implements BBPosCallback
     }
     
     private void getTokenFromServer(String bbposSerial){
-        //TODO: Request token from Server API: (@link)[http://yaadpay.yaad.net]
+        //TODO: Request token from Server API. Contact us for the API: (@link)[http://yaadpay.yaad.net]
         String tokenFromServer = "GOT_TOKEN_FROM_SERVER";
 
         //After we get the token we update the library
@@ -141,7 +138,7 @@ public class MainActivity extends Activity implements BBPosCallback
 }
 ```
 - <strong>onBTResponse</strong> - Callback notifier for the Bluetooth state.
-- <strong>getTokenFromServer:</strong> In order to get the token you need to make a Request to our server: <br> [Get Token From Server API](https://yaadpay.yaad.net).
+- <strong>getTokenFromServer:</strong> In order to get the token you need to make a Request to our server please: <br> [Contact Us for the API](https://yaadpay.yaad.net).
 
 #### Bluetooth Callback Parameters 
 
