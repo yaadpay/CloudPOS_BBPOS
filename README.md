@@ -388,10 +388,10 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
 #### loadParams - function
 
 | Parameter | Description | Example |
-| ------ | ------ | ------ |
-| Context context | Callback reference | MainActivity.this |
-| boolean Force | Parameter for debugging <br> True - Wipes loading params cache memory (Will result burning information to the mPos device which make the load params slower)   | True / False  |
-| LoadParamsCallback loadParamsCallback | Trigger the transaction from the BBCommunication class in the SDK  |  [Here](#startamount)  |
+| ------------ | ------------ | ------------ |
+| (Context) context | Callback reference | MainActivity.this |
+| (boolean) Force | Parameter for debugging <br> True - Wipes loading params cache memory (Will result burning information to the mPos device which make the load params slower)   | True / False  |
+| (LoadParamsCallback) loadParamsCallback | Trigger the transaction from the BBCommunication class in the SDK  |  [Here](#startamount)  |
 
 
 ##### Load params has 2 callbacks, 
