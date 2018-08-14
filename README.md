@@ -299,6 +299,7 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
 ####  <br>1) Res Integer callback.
 ###### Integer callback that state whether the Transaction Activity has successfully opened or not.
 #### startEmvResult 
+
 | Parameter | Description |  
 | ------ | ------ |
 | BBPosCallback.SUCCESS | Transaction opened successfully.<br><br> <strong>Can be ignored and handle only fail statuses.</strong>  |
