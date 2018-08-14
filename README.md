@@ -297,9 +297,11 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
 
 #### StartAmount has 2 callbacks:
 
-####  <br>1) Res Integer callback.
-###### Integer callback that state whether the Transaction Activity has successfully opened or not.
-#### startEmvResult 
+<br>
+
+####  1) Res Integer callback.
+###### Integer callback that state whether the Transaction Activity has successfully opened or not. [startEmvResult]
+
 <br>
 
 | Parameter | Description |  
