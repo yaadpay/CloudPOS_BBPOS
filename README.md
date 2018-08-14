@@ -219,7 +219,7 @@ The parameters are the same , transactionHash will be added on top of the WebVie
 
 <br> 
 
-<img alt="not found" src="https://web1.yaad.net/yaadpay/tmp/cloudpos/img/emvscreen_staramount.jpeg"/>
+<img alt="not found" src="https://web1.yaad.net/yaadpay/tmp/cloudpos/img/emvscreen_startamount.jpeg"/>
 
 <br> 
 
