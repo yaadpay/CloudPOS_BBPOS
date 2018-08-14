@@ -200,6 +200,19 @@ When Bluetooth is connected to the BBPOS Device it is recommanded to save locall
 | startAmount | Trigger the transaction from the BBCommunication class in the SDK  |  [Here](#startamount)  |
 
 
+- <strong> </strong> NOTE: startAmount has another Function for development usage called: "startAmountWithWebView". <br>
+On that screen you all the params for the transaction Hash according to SHVA Documents. <br>
+The parameters are the same , transactionHash will be added on top of the WebView's hash. <br>
+
+#### StartEmv with WebView - ScreenShoot
+ <br> 
+<img alt="not found" src=="/>
+<br> 
+#### StartEmv without WebView - ScreenShoot
+<br> 
+<img alt="not found" src=="/>
+<br> 
+
 
 ## BBCommunication
 
@@ -433,6 +446,11 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
 | BBPosCallback.LOAD_PARAM_FAILED | Load Param could not load. <br>  Prompt dialog to try load params again is highly recommanded.  <br> <strong> -NOTE: Do Not automatically intiate load params, doing so will result a loop.</strong>  |
 
 <br> 
+
+#### LoadParam - ScreenShoot
+<img alt="not found" src=="/>
+<br> 
+
 
 ## FAQ
 ### Connecting to bluetooth shows a scan in the logs, but connection never made what to do?
