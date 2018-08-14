@@ -299,13 +299,16 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
 ####  <br>1) Res Integer callback.
 ###### Integer callback that state whether the Transaction Activity has successfully opened or not.
 #### startEmvResult 
+<br>
 
 | Parameter | Description |  
 | ------ | ------ |
-| BBPosCallback.SUCCESS | Transaction opened successfully.<br><br> <strong>Can be ignored and handle only fail statuses.</strong>  |
+| BBPosCallback.SUCCESS | Transaction opened successfully.Can be ignored and handle only fail statuses.|
 | BBPosCallback.FAILED | Need to load parameters from the server |
 | BBPosCallback.BT_DISCONNECTED | Bluetooth is disconnected, can not initate transaction |
-####  <br>2) Activity For Results
+
+<br>
+#### 2) Activity For Results
 ###### When the transaction is done, and activity for result will be triggered.
 ```java
   @Override
