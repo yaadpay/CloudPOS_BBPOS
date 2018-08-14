@@ -35,7 +35,7 @@ SDK for integrating with the BBPOS Device, within Android Application.
     * [Search & Connect BT](#search--connect-bt)
     * [Start EMV](#startamount)
     * [Load Params](#load-params)
-    * [Load Paams - ScreenShot](#load-params-screenshot)
+      * [Load Paams - ScreenShot](#load-params-screenshot)
 * [FAQ](#faq)    
    * [Connecting to bluetooth shows a scan in the logs, but connection never made what to do?](#connecting-to-bluetooth-shows-a-scan-in-the-logs-but-connection-never-made-what-to-do)
    * [In the load parameters screen I get Error(900)](#in-the-load-parameters-screen-i-get-error900)
