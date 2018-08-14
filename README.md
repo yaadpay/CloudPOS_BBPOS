@@ -308,6 +308,7 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
 | BBPosCallback.BT_DISCONNECTED | Bluetooth is disconnected, can not initate transaction |
 
 <br>
+
 #### 2) Activity For Results
 ###### When the transaction is done, and activity for result will be triggered.
 ```java
@@ -391,29 +392,43 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
 ```
 #### loadParams - function
 
+<br>
+
 | Parameter | Description | Example |
 | ------------ | ------------ | ------------ |
 | (Context) context | Callback reference | MainActivity.this |
 | (boolean) Force | Parameter for debugging <br> True - Wipes loading params cache memory (Will result burning information to the mPos device which make the load params slower)   | True / False  |
 | (LoadParamsCallback) loadParamsCallback | Trigger the transaction from the BBCommunication class in the SDK  |  [Here](#startamount)  |
 
+<br>
 
 ##### Load params has 2 callbacks, 
  
-####  <br>1) Res Integer callback.
+ <br>
+ 
+####  1) Res Integer callback.
 ###### Integer callback that state whether the Loading Activity has successfully opened or not.
+
+<br>
+
 | Parameter | Description |  
 | ------ | ------ | ------ |
 | BBPosCallback.SUCCESS | Transaction opened successfully.<br><br> <strong>Can be ignored and handle only fail statuses.</strong>  |
 | BBPosCallback.DEVICE_BUSY | Device is busy |
 | BBPosCallback.BT_DISCONNECTED | Device is not connected  |
 
-#### <br> 2) LoadParamsCallback
+<br>
+
+####  2) LoadParamsCallback
 ###### Custom Callback that indicates if the loading was success or not.
+
+<br> 
+
 | Parameter | Description |  
 | ------ | ------ | ------ |
 | BBPosCallback.LOAD_PARAM_SUCCESS | Load Parameters loaded successfully.  |
 | BBPosCallback.LOAD_PARAM_FAILED | Load Param could not load.<br> <br> Prompt dialog to try load params again is highly recommanded. <br><br> <strong>-NOTE: <br> Do Not automatically intiate load params, doing so will result a loop. </strong>  |
+<br> 
 
 ## FAQ
 ### Connecting to bluetooth shows a scan in the logs, but connection never made what to do?
