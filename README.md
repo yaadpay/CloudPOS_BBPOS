@@ -413,7 +413,7 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
 
 | Parameter | Description |  
 | ------ | ------ |
-| BBPosCallback.SUCCESS | Transaction opened successfully.<strong>Can be ignored and handle only fail statuses.</strong>  |
+| BBPosCallback.SUCCESS | Transaction opened successfully.<br> <br> <strong>Can be ignored and handle only fail statuses.</strong>  |
 | BBPosCallback.DEVICE_BUSY | Device is busy |
 | BBPosCallback.BT_DISCONNECTED | Device is not connected  |
 
@@ -427,7 +427,7 @@ All functions can be found in the JavaDocs: [Here](https://yaadpay.yaad.net)
 | Parameter | Description |  
 | ------ | ------ |
 | BBPosCallback.LOAD_PARAM_SUCCESS | Load Parameters loaded successfully.  |
-| BBPosCallback.LOAD_PARAM_FAILED | Load Param could not load. Prompt dialog to try load params again is highly recommanded. -NOTE: Do Not automatically intiate load params, doing so will result a loop.  |
+| BBPosCallback.LOAD_PARAM_FAILED | Load Param could not load. <br>  Prompt dialog to try load params again is highly recommanded.  <br> <strong> -NOTE: Do Not automatically intiate load params, doing so will result a loop.</strong>  |
 
 <br> 
 
