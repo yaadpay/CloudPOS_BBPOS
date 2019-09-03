@@ -1,0 +1,14 @@
+    EditText mailEt;
+    private BpEditText creditCardEt;
+    private EditText expireEt;
+    private EditText fullNameEt;
+    private EditText cvvEt;
+    private EditText idEt;
+    private TextView headerTv;
+    private String monthSelected;
+    private String yearSelected;
+    private RelativeLayout fullNameRl;
+    private RelativeLayout dummyHider;
+    private RelativeLayout creditCardRl;
+    private RelativeLayout mailRl;
+    private RelativeLayout idRl;

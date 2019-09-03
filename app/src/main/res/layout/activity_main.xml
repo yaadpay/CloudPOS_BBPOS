@@ -13,10 +13,71 @@
     android:paddingTop="@dimen/bbpos_activity_vertical_margin">
 
 
+
     <RelativeLayout
         android:id="@+id/buttons_section"
         android:layout_width="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/current_version">
+        <Button
+            android:id="@+id/loadParamsButton"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:background="#4e8da6"
+            android:text="Load params"
+            android:textColor="#fff" />
+
+        <Button
+
+            android:id="@+id/disconnect_Bt"
+            android:layout_below="@id/loadParamsButton"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:background="#FFA64E54"
+
+            android:text="Disconnect BT"
+            android:textColor="#fff"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="15dp"/>
+
+        <Button
+            android:id="@+id/connect_Bt"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_alignTop="@+id/disconnect_Bt"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/loadParamsButton"
+            android:background="#4e8da6"
+            android:text="Connect BT"
+            android:textColor="#fff" />
+
+        <Button
+            android:id="@+id/openPaymentManager"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/disconnect_Bt"
+            android:layout_marginTop="0dp"
+            android:background="#4e8da6"
+            android:layout_below="@id/loadParamsButton"
+            android:text="Start Tran"
+            android:textColor="#fff" />
+
+
+
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:visibility="gone"
+
+        android:layout_width="wrap_content"
+        android:layout_marginTop="65dp"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/current_version">
 
@@ -32,7 +93,7 @@
             android:textColor="#fff"/>
 
         <Button
-            android:id="@+id/openPaymentManager"
+            android:id="@+id/openPaymentManager2"
             android:layout_width="@dimen/_90sdp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -44,7 +105,7 @@
 
         <Button
 
-            android:id="@+id/disconnect_Bt"
+            android:id="@+id/disconnect_Bt2"
             android:layout_width="@dimen/_90sdp"
             android:layout_height="wrap_content"
             android:background="#FFA64E54"
@@ -61,11 +122,11 @@
             android:background="#4e8da6"
             android:text="Clear texts"
             android:textColor="#fff"
-            android:layout_alignTop="@+id/disconnect_Bt"
-            android:layout_alignStart="@+id/loadParamsButton"/>
+            android:layout_alignTop="@+id/disconnect_Bt2"
+            android:layout_alignStart="@+id/loadParamsButton2"/>
 
         <Button
-            android:id="@+id/loadParamsButton"
+            android:id="@+id/loadParamsButton2"
             android:layout_width="@dimen/_90sdp"
             android:layout_height="wrap_content"
             android:background="#4e8da6"
@@ -75,13 +136,13 @@
             android:layout_centerHorizontal="true"/>
 
         <Button
-            android:id="@+id/connect_Bt"
+            android:id="@+id/connect_Bt2"
             android:layout_width="@dimen/_90sdp"
             android:layout_height="wrap_content"
             android:background="#4e8da6"
             android:text="Connect BT"
             android:textColor="#fff"
-            android:layout_alignTop="@+id/disconnect_Bt"
+            android:layout_alignTop="@+id/disconnect_Bt2"
             android:layout_alignParentEnd="true"/>
 
     </RelativeLayout>
@@ -114,7 +175,7 @@
         />
 
     <LinearLayout
-
+        android:visibility="gone"
         android:id="@+id/payment_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -193,7 +254,7 @@
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
 
-        android:layout_height="@dimen/_90sdp"
+        android:layout_height="match_parent"
         android:layout_below="@id/current_state"
         android:layout_above="@id/payment_info"
         android:layout_marginTop="8dp"
@@ -212,5 +273,47 @@
             android:textSize="16sp"/>
 
     </ScrollView>
+    <RelativeLayout
+        android:id="@+id/Wellcome"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#71bad6">
+
+        <RelativeLayout
+            android:id="@+id/payment_info2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:background="#8bedeaea"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_centerHorizontal="true"
+                android:id="@+id/img2"
+                android:src="@drawable/ic_bbpos_device"
+                android:layout_width="145dp"
+                android:layout_height="105dp" />
+            <ScrollView
+                android:layout_below="@+id/img2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/text1"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="25sp"
+
+                    android:text="@string/_bb_page_wel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </ScrollView>
+
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

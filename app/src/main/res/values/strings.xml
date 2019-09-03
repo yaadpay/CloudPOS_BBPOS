@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">CloudPos_BBPOS</string>
+    <string name="app_name">SecurePay</string>
+    <string name="_bb_page_wel">Secure Pay Application,\n\n Please do not remove if you use one of our services.</string>
+    <string name="searchBt">מחפש חיבור..</string>
+    <string name="retry">נסה שנית</string>
 </resources>
