@@ -1573,128 +1573,67 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
     }
     private static String failedUrl = null;
     private static String successURL = null;
-    private static boolean flag = false;
-
     @Override
     public void onBackPressed() {
-        clearActivity();
-//        try {
-//            super.onBackPressed();
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-            String results = OVERRIDE_RES;
-            //Log.e(TAG, "convertHost3: " + successURL + ", " + failedUrl );
-            Log.e(TAG, "exit:  CLOUD ["  + lastAction + "], [" + results + "]");
-            // BroadCastReceiver
-            Intent intent = new Intent(this, SchemeActivity.class);
-            intent.setAction("example.cloudpos_bbpos");
-            intent.putExtra("action",lastAction);
-            intent.putExtra("result",results);
-            intent.putExtra("status",isSuccess);
-            if(sameTab.equalsIgnoreCase("True")) {
-                intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-            }
-            Log.e(TAG, "exit:  >>" + getPackageName() + "." + SchemeActivity.class.getSimpleName() );
-            Log.e(TAG, "action:  >>" + lastAction);
-            Log.e(TAG, "status:  >>" + isSuccess );
-            sendBroadcast(intent);
 
-            //URL SCHEME results => "?results" +
-            if(successURL == null){
-                successURL = "";
-            }else if(successURL.equalsIgnoreCase(CLOSED_APP)){
-                //finish();
-                clearActivity();
-                return;
-            }
-            //sameTab
-
-            if(failedUrl == null){
-                failedUrl = "";
-            }
-            String undecode_base_url =((isSuccess)?successURL:failedUrl);
-            String base_url = undecode_base_url;
-            Log.e(TAG, "exit: results_scheme->Failed/Success : " + base_url );
-            try {
-                base_url = URLDecoder.decode(undecode_base_url, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-//            try {
-//                base_url = URLDecoder.decode(base_url, "UTF-8");
-//            } catch (UnsupportedEncodingException e) {
-//                e.printStackTrace();
-//            }
-
-
-            String prefix = ((base_url.contains("?"))?"&": "?");
-            String results_scheme = base_url + prefix +"action=" + lastAction +"&results=" + Uri.encode(results);
-            Log.e(TAG, "exit:  results_scheme ["  + results_scheme + "]");
-            Log.e(TAG, "exit:  results_scheme - encode ["  + Uri.encode(results) + "]");
-            Log.e(TAG, "exit:  results_scheme - parse ["  + Uri.parse(results) + "]");
-
-            Intent result = new Intent(Intent.ACTION_VIEW, Uri.parse(results_scheme));
-
-            //StartActivity for result
-            result.putExtra(lastAction, results);
-            if(sameTab.equalsIgnoreCase("True")) {
-                result.putExtra(Browser.EXTRA_APPLICATION_ID, "com.android.chrome");
-                result.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            }
-            result.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
-                    | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    | Intent.FLAG_ACTIVITY_NO_ANIMATION
-            );
-            setResult(Activity.RESULT_OK, result);
-            successURL = null;
-            failedUrl = null;
-
-            try{
-                startActivity(result);
-//                clearActivity();
-            }catch (Exception e){
-                Toast.makeText(this, "No Activity found to handle Intent {dat="+results_scheme+" (has extras) }", Toast.LENGTH_LONG).show();
-                Log.e(APP_TAG, "exit: " + "No Activity found to handle Intent {dat="+results_scheme+" (has extras) }" );
-                Log.e(APP_TAG, "exit: " + "No Activity found to handle Intent {failUrl=["+failedUrl+"], succUrl=[" + successURL +"]}");
-                e.printStackTrace();
-            }
-            clearActivity();
-        if(FORCE_CLEAR) {
-            super.onBackPressed();
-        }
+        //super.onBackPressed();
+        SEND_BT_RESPONSE = false;
+        disconnectBt();
+        exit("user_back_pressed");
     }
 
-    private void clearActivity(){
-        safeExit();
-        overridePendingTransition(0, 0);
-    }
 
     private boolean isSuccess = false;
     private String lastAction = "";
-    private String OVERRIDE_RES = "";
     private void exit(String results){
-        OVERRIDE_RES = results ;
-        onBackPressed();
+        //Log.e(TAG, "convertHost3: " + successURL + ", " + failedUrl );
+        Log.e(TAG, "exit:  CLOUD ["  + lastAction + "], [" + results + "]");
+        // BroadCastReceiver
+        final Intent intent=new Intent();
+        intent.setAction("example.cloudpos_bbpos");
+        intent.putExtra("action",lastAction);
+        intent.putExtra("result",results);
+        intent.putExtra("status",isSuccess);
+        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        Log.e(TAG, "exit:  >>" + getPackageName() + "." + SchemeActivity.class.getSimpleName() );
+        Log.e(TAG, "action:  >>" + lastAction);
+        Log.e(TAG, "status:  >>" + isSuccess );
 
-    }
 
-    public void safeExit2() {
-        int pid = android.os.Process.myPid();
-        android.os.Process.killProcess(pid);
-        System.exit(0);
-    }
+        sendBroadcast(intent);
 
-
-    private void safeExit(){
-        if(Build.VERSION.SDK_INT>=17 && Build.VERSION.SDK_INT<21){
-            finishAffinity();
-        } else if(Build.VERSION.SDK_INT>=21){
-            finishAndRemoveTask();
+        //URL SCHEME results => "?results" +
+        if(successURL == null){
+            successURL = "";
         }
-        overridePendingTransition(0,0);
+
+        if(failedUrl == null){
+            failedUrl = "";
+        }
+        String results_scheme = ((isSuccess)?successURL:failedUrl) +"?action=" + lastAction +"&results=" + Uri.encode(results);
+        Log.e(TAG, "exit:  results_scheme ["  + results_scheme + "]");
+        Log.e(TAG, "exit:  results_scheme - encode ["  + Uri.encode(results) + "]");
+        Log.e(TAG, "exit:  results_scheme - parse ["  + Uri.parse(results) + "]");
+
+        Intent result = new Intent(Intent.ACTION_VIEW, Uri.parse(results_scheme));
+
+        //StartActivity for result
+        result.putExtra(lastAction, results);
+        result.putExtra(Browser.EXTRA_APPLICATION_ID, "com.android.chrome");
+        result.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        setResult(Activity.RESULT_OK, result);
+        successURL = null;
+        failedUrl = null;
+        try{
+            startActivity(result);
+            overridePendingTransition(0,0);
+        }catch (Exception e){
+            Toast.makeText(this, "No Activity found to handle Intent {dat="+results_scheme+" (has extras) }", Toast.LENGTH_LONG).show();
+            Log.e(APP_TAG, "exit: " + "No Activity found to handle Intent {dat="+results_scheme+" (has extras) }" );
+            Log.e(APP_TAG, "exit: " + "No Activity found to handle Intent {failUrl=["+failedUrl+"], succUrl=[" + successURL +"]}");
+            e.printStackTrace();
+        }
+        finish();
     }
 
     @Override
