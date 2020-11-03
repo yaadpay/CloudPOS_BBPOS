@@ -30,8 +30,9 @@ public class SchemeMainActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if( getIntent().getBooleanExtra("Exit me", false)){
-            getIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+            getIntent().addFlags(
+//                    Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
                     | Intent.FLAG_ACTIVITY_NO_ANIMATION
             );
             finish();

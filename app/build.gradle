@@ -6,8 +6,8 @@ android {
         applicationId "example.cloudpos_bbpos"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 25
-        versionName "1.0.25b.1"
+        versionCode 26
+        versionName "1.0.26"
 
 
         useLibrary 'org.apache.http.legacy'
