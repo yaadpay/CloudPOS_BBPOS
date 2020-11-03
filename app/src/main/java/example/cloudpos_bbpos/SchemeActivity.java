@@ -1,10 +1,19 @@
 package example.cloudpos_bbpos;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Browser;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,12 +22,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bbpos.bbdevice.bblib.TransactionState;
+
 import com.bbpos.bbdevice.bblib.activities.TranManagerActivity;
 import com.bbpos.bbdevice.bblib.communication.BBCommunication;
-import com.bbpos.bbdevice.bblib.communication.BBCommunication2;
 import com.bbpos.bbdevice.bblib.interfaces.BBPosCallback;
 import com.bbpos.bbdevice.bblib.interfaces.BBUtilCallBacks;
+import com.bbpos.bbdevice.bblib.interfaces.Constant;
 import com.bbpos.bbdevice.bblib.interfaces.LoadParamsCallback;
+import com.bbpos.bbdevice.bblib.utilities.j;
 import com.bbpos.bbdevice.bblib.utilities.StringUtil;
 
 import org.apache.http.HttpResponse;
@@ -34,11 +45,15 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import example.cloudpos_bbpos.YaadPay.YaadPaymentActivity;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.content.ContentValues.TAG;
 import static android.view.View.GONE;
@@ -49,18 +64,39 @@ import static example.cloudpos_bbpos.MainActivity.StatusCallback.STATUS_SUCCESS;
 
 
 public class SchemeActivity extends Activity  implements View.OnClickListener,  BBPosCallback {
+    private static final String TOKEN_TAG = "PREV_T";
     /** Variable that communicates with our library thgough commands **/
     private BBCommunication bbCommunication;
 
     private HashMap<String , Boolean >  maps = new HashMap<>();
     private String hostLink = null;
+    public static String sameTab = "True";
     private String SERIAL_NUMBER;
     private RelativeLayout alertContainer = null;
+    private Runnable runnable = null;
+    public static String CLOSED_APP = "closed";
+    private boolean FORCE_CLEAR = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FORCE_CLEAR = false;
         overridePendingTransition(0,0);
         setContentView(R.layout.activity_main_scheme);
+
+        if( getIntent().getBooleanExtra("Exit me", false)){
+            getIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    | Intent.FLAG_ACTIVITY_NO_ANIMATION
+            );
+            Log.d(TAG, "onCreate: Blabla" );
+            finish();
+            overridePendingTransition(0,0);
+            return; // add this to prevent from doing unnecessary stuffs
+        }
+
+
         Button btnx =(Button) findViewById(R.id.btnX);
         alertContainer =(findViewById(R.id.alert_Container));
         alertContainer.setVisibility(View.GONE);
@@ -74,21 +110,24 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
 
         SEND_BT_RESPONSE = true;
 
-        Uri data = getIntent().getData();
+        final Uri data = getIntent().getData();
 
-        if(data != null) {
+        runnable  = new Runnable() {
+            @Override
+            public void run() {
+                if(data != null) {
 
-            Log.e(TAG, "onCreate: " + getIntent().getDataString());
-            try {
+                    Log.e(TAG, "onCreate: " + getIntent().getDataString());
+                    try {
 
-                ((TextView) findViewById(R.id.text1)).setText(getIntent().getDataString());
-                ((TextView) findViewById(R.id.text1)).append("\n\n");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                        ((TextView) findViewById(R.id.text1)).setText(getIntent().getDataString());
+                        ((TextView) findViewById(R.id.text1)).append("\n\n");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-            lastAction = getIntent().getData().getAuthority(); // v2
-            //cloudpos://v2/connectBt/xP?successLink=example://success&failedLink=example://failed&force=true&
+                    lastAction = getIntent().getData().getAuthority(); // v2
+                    //cloudpos://v2/connectBt/xP?successLink=example://success&failedLink=example://failed&force=true&
 /*
             Log.e(APP_TAG, "onCreate: lastAction getAuthority =" + lastAction);//
             Log.e(APP_TAG, "onCreate: lastAction getPath =" + getIntent().getData().getPath());//  getPath =/connectBt/xP
@@ -98,40 +137,57 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
             Log.e(APP_TAG, "onCreate: lastAction getSchemeSpecificPart =" + getIntent().getData().getSchemeSpecificPart());//  getSchemeSpecificPart =//v2/connectBt/xP?successLink=example://success&failedLink=example://failed&force=true&
             Log.e(APP_TAG, "onCreate: lastAction getFragment =" + getIntent().getData().getFragment());//  getFragment =null
             Log.e(APP_TAG, "onCreate: lastAction getLastPathSegment =" + getIntent().getData().getLastPathSegment());//  getLastPathSegment =xP
+            Log.e(APP_TAG, "onCreate: lastAction =========================================== getEncodedPath =" + getIntent().getData().getEncodedPath());//  encodedPath =xP
+            Log.e(APP_TAG, "onCreate: lastAction getEncodedPath =" + getIntent().getData().getEncodedPath());//  encodedPath =xP
+            Log.e(APP_TAG, "onCreate: lastAction getEncodedQuery =" + getIntent().getData().getEncodedQuery());//  encodedPath =xP
+            Log.e(APP_TAG, "onCreate: lastAction getEncodedSchemeSpecificPart =" + getIntent().getData().getEncodedSchemeSpecificPart());//  encodedPath =xP
+            Log.e(APP_TAG, "onCreate: lastAction getData =" + getIntent().getData());//  encodedPath =xP
+            Log.e(APP_TAG, "onCreate: lastAction getData1 =" + getIntent().getData().getEncodedUserInfo());//  encodedPath =xP
+            Log.e(APP_TAG, "onCreate: lastAction getData2 =" + getIntent().getData().getEncodedFragment());//  encodedPath =xP
+            Log.e(APP_TAG, "onCreate: lastAction getData2 =" + getIntent().getData().toString());//  encodedPath =xP
+            Log.e(APP_TAG, "onCreate: lastAction getData2 =" + getIntent().toString());//  encodedPath =xP
 */
 
-            isSuccess = false;
-            attachCallbacks();
 
-            String path = getIntent().getData().getPath();
-            String pths[] = path.split("/");
-            String version = lastAction;
-            try{
-                if(pths[1] != null){
-                    lastAction = pths[1];
-                }
-            }catch (Exception e){
-            }
-            Log.e(TAG, "onCreate: GotURL: " + lastAction );
-            Toast.makeText(this, "Command: " + lastAction, Toast.LENGTH_LONG).show();
-            switch (version){
-                case "v1":
-                    handleCommandV1(lastAction);
-                    break;
-                case "v2":
-                    handleCommandV2(lastAction);
-                    break;
-                default:
-                    handleCommand(lastAction);
-            }
+                    isSuccess = false;
+                    attachCallbacks();
+
+                    String path = getIntent().getData().getPath();
+                    String pths[] = path.split("/");
+                    String version = lastAction;
+                    try{
+                        if(pths[1] != null){
+                            lastAction = pths[1];
+                        }
+                    }catch (Exception e){
+                    }
+                    Log.e(TAG, "onCreate: GotURL: " + lastAction );
+                    Toast.makeText(SchemeActivity.this, "Command: " + lastAction, Toast.LENGTH_SHORT).show();
+                    switch (version){
+                        case "v1":
+                            handleCommandV1(lastAction);
+                            break;
+                        case "v2":
+                            handleCommandV2(lastAction);
+                            break;
+                        default:
+                            handleCommand(lastAction);
+                    }
             /*
             for(String sc : pths){
                 Log.e(TAG, "onCreate: ["  + sc+ "]");
             }
 */
 
-        }
+                }
 
+            }
+        };
+        boolean flag = requestLocationPermission();
+        Log.e(TAG, "onCreate: permission check:" + flag );
+        if(flag){
+            new Handler().post(runnable);
+        }
 
         /** Buttons initialize **/
         TextView button = (TextView) findViewById(R.id.openPaymentManager);
@@ -153,6 +209,8 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
         button = (TextView) findViewById(R.id.clear_edittexts);
         button.setOnClickListener(this);
     }
+
+    int PRIVATE_MODE = 0;
 
     private void handleCommandV1(String command) {
         if(maps.get(command) == null){
@@ -269,11 +327,16 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
 
 
                 loadParametersFunction(new LoadParamsCallback() {
+
+                    //Actually paramloaded button
                     @Override
                     public void onParamLoaded(byte statusResult) {
                         switch (statusResult) {
                             case LoadParamsCallback.LOAD_PARAM_FAILED:
+                                FORCE_CLEAR = true;
                                 exit("load_param_failed");//loadParams
+                                Log.d(TAG, "onParamLoaded: 11");
+
                                 //  //Toast.makeText(MainActivity.this, "Load Failed - Prompt Dialog Yes - No #NOTE: do not open load params again so it wont stuck in a loop", //Toast.LENGTH_SHORT).show();
                                 break;
                             case LoadParamsCallback.LOAD_PARAM_SUCCESS:
@@ -303,6 +366,7 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
 
                         case "token":
                             bbCommunication.updateToken(x[1]);
+                            setTokenToMemory(TOKEN_TAG,x[1]);
                             isSuccess = true;
                             res = "token_updated";
                             break;
@@ -326,7 +390,10 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                             public void onParamLoaded(byte statusResult) {
                                 switch (statusResult) {
                                     case LoadParamsCallback.LOAD_PARAM_FAILED:
+                                        FORCE_CLEAR = true;
                                         exit("load_param_failed");//loadParams
+                                        Log.d(TAG, "onParamLoaded: 12");
+
                                         //  //Toast.makeText(MainActivity.this, "Load Failed - Prompt Dialog Yes - No #NOTE: do not open load params again so it wont stuck in a loop", //Toast.LENGTH_SHORT).show();
                                         break;
                                     case LoadParamsCallback.LOAD_PARAM_SUCCESS:
@@ -376,10 +443,10 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                     exit("param_missing_hostLink");
                     return;
                 }
-                if (!bbCommunication.isBtConnected()) {
-                    exit("bt_disconnected");//v1/pay
-                    return;
-                }
+//                if (!bbCommunication.isBtConnected()) {
+//                    exit("bt_disconnected");//v1/pay
+//                    return;
+//                }
                 convertHost(hostLink);
 
                 break;
@@ -406,6 +473,22 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
         */
     }
 
+    private void setTokenToMemory(String tag,String val) {
+        SharedPreferences sharedPreferences = this.getApplicationContext().getSharedPreferences("[YAAD CLOUDPOS EMV]", this.PRIVATE_MODE);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(tag, val);
+        editor.commit();
+
+    }
+
+    private String getTokenToMemory(String tag, String defaultVal) {
+        String token = "";
+        SharedPreferences sharedPreferences = this.getApplicationContext().getSharedPreferences("[YAAD CLOUDPOS EMV]", this.PRIVATE_MODE);
+        return sharedPreferences.getString(tag, defaultVal);
+    }
+
+
     private void handleCommand2(String command) {
         switch (command) {
             case "/pay":
@@ -429,8 +512,10 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
             Log.e(APP_TAG, "handleCommand: Command not found: [" + command +"]" );
             return;
         }
+        String query = getIntent().getData().getEncodedQuery();
 
-        String[] splited = getIntent().getData().getQuery().split("&");
+        Log.e(TAG, "handleCommand: encoded " + query);
+        String[] splited = query.split("&");
         switch (command) {
             case "disconnectBT":/** ======================= Disconnect BT  ====================== **/
                 for (String param : splited) {
@@ -442,6 +527,9 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                             break;
                         case "failedLink":
                             failedUrl = x[1];
+                            break;
+                        case "sameTab":
+                            sameTab = x[1];
                             break;
                     }
                 }
@@ -456,6 +544,7 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                     return;
 
                 }
+
                 if (!bbCommunication.isBtConnected()) {
                     exit("bt_already_disconnected");//connectBt
 
@@ -464,10 +553,11 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                 disconnectBt();
                 exit("bt_disconnected");//connectBt
                 break;
-            case "connectBT":/** ======================= Connect BT  ====================== **/
+            case "connectBT":/** ======================= Connect BT  Def ====================== **/
 
                 for (String param : splited) {
                     String[] x = param.split("=");
+
                     //Log.e(APP_TAG, "\n KEY: " + x[0] + ", VAL: " + x[1] + "\n");
                     switch (x[0]) {
                         case "successLink":
@@ -475,6 +565,9 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                             break;
                         case "failedLink":
                             failedUrl = x[1];
+                            break;
+                        case "sameTab":
+                            sameTab = x[1];
                             break;
                     }
                 }
@@ -513,6 +606,9 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                         case "failedLink":
                             failedUrl = x[1];
                             break;
+                        case "sameTab":
+                            sameTab = x[1];
+                            break;
 
                         case "force":
                             try {
@@ -543,7 +639,17 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                     public void onParamLoaded(byte statusResult) {
                         switch (statusResult) {
                             case LoadParamsCallback.LOAD_PARAM_FAILED:
-                                exit("load_param_failed");//loadParams
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        FORCE_CLEAR = true;
+                                        exit("load_param_failed");//loadParams
+//                                        onBackPressed();
+                                    }
+                                }, 100);
+
+
+                                Log.d(TAG, "onParamLoaded: 13");
                                 //  //Toast.makeText(MainActivity.this, "Load Failed - Prompt Dialog Yes - No #NOTE: do not open load params again so it wont stuck in a loop", //Toast.LENGTH_SHORT).show();
                                 break;
                             case LoadParamsCallback.LOAD_PARAM_SUCCESS:
@@ -570,10 +676,14 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                         case "failedLink":
                             failedUrl = x[1];
                             break;
+                        case "sameTab":
+                            sameTab = x[1];
+                            break;
 
                         case "token":
                             try {
                                 bbCommunication.updateToken(x[1]);
+                                setTokenToMemory(TOKEN_TAG,x[1]);
                                 isSuccess = true;
                                 res = "token_updated";
                             }catch (Exception e){
@@ -610,6 +720,16 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                             break;
                         case "host":
                             hostLink = x[1];
+                            try {
+                                hostLink = URLDecoder.decode(x[1], "UTF-8");
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+
+
+                            break;
+                        case "sameTab":
+                            sameTab = x[1];
                             break;
                     }
                 }
@@ -630,10 +750,10 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                     exit("param_missing_hostLink");
                     return;
                 }
-                if (!bbCommunication.isBtConnected()) {
-                    exit("bt_disconnected");//v1/pay
-                    return;
-                }
+//                if (!bbCommunication.isBtConnected()) {
+//                    exit("bt_disconnected");//pay
+//                    return;
+//                }
                 convertHost(hostLink);
                 break;
             case "manualPay":/** ======================= MANUAL PAY  ====================== **/
@@ -659,6 +779,14 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                             break;
                         case "host":
                             hostLink = x[1];
+                            try {
+                                hostLink = URLDecoder.decode(x[1], "UTF-8");
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        case "sameTab":
+                            sameTab = x[1];
                             break;
                     }
                 }
@@ -964,6 +1092,7 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                         switch (statusResult) {
                             case LoadParamsCallback.LOAD_PARAM_FAILED:
                                 exit("load_param_failed");//loadParams
+                                Log.d(TAG, "onParamLoaded: 14");
                                 //  //Toast.makeText(MainActivity.this, "Load Failed - Prompt Dialog Yes - No #NOTE: do not open load params again so it wont stuck in a loop", //Toast.LENGTH_SHORT).show();
                                 break;
                             case LoadParamsCallback.LOAD_PARAM_SUCCESS:
@@ -993,6 +1122,7 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
 
                         case "token":
                             bbCommunication.updateToken(x[1]);
+                            setTokenToMemory(TOKEN_TAG,x[1]);
                             isSuccess = true;
                             res = "token_updated";
 
@@ -1046,10 +1176,10 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                     exit("param_missing_hostLink");
                     return;
                 }
-                if (!bbCommunication.isBtConnected()) {
-                    exit("bt_disconnected");//v2/pay
-                    return;
-                }
+//                if (!bbCommunication.isBtConnected()) {
+//                    exit("bt_disconnected");//v2/pay
+//                    return;
+//                }
                 convertHost(hostLink);
 
                 break;
@@ -1059,20 +1189,54 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
     private static HashMap<String,String> CURRENT_PAY = new HashMap<>();
 
     private void launchTransction(HashMap<String,String> hashMap){
-        int startEmvResult = bbCommunication.startAmount(SchemeActivity.this, hashMap, RESULT_CODE);
-        if(startEmvResult != BBPosCallback.SUCCESS)
-        {
-            switch (startEmvResult)
+        j.b("launchTransction","Started Transction from launchTransction");
+        Log.e(TAG, "launchTransction: [" + RE_CONNECT_TRIES + "/" +MAX_TRIES  +"]");
+        IS_TRANSCTION_SENT = false;
+        if(RE_CONNECT_TRIES<MAX_TRIES){
+            int startEmvResult = bbCommunication.startAmount(SchemeActivity.this, hashMap, RESULT_CODE);
+            if(startEmvResult != BBPosCallback.SUCCESS)
             {
-                case BBPosCallback.FAILED:
-                    loadParametersUsage();
-                    //exit("load_params_required");//pay
-                    break;
-                case BBPosCallback.BT_DISCONNECTED:
-                    exit("bt_disconnected");//pay
-                    break;
+                switch (startEmvResult)
+                {
+                    case BBPosCallback.FAILED:
+                        ////Toast.makeText(this, "Need to load params!", //Toast.LENGTH_SHORT).show();
+                        loadParametersUsage();
+                        break;
+                    case BBPosCallback.BT_DISCONNECTED:
+                        //Toast.makeText(this, "Bt is not connected", //Toast.LENGTH_SHORT).show();
+                        IS_TRANSCTION_SENT = true;
+                        RE_CONNECT_TRIES++;
+                        //bbCommunication.connectBT(SchemeActivity.this);
+                        connectBt();
+                        //exit("bt_disconnected");
+                        break;
+                }
             }
+        }else{
+
+            exit("bt_disconnected");
         }
+      //  int startEmvResult = bbCommunication.startAmount(SchemeActivity.this, hashMap, RESULT_CODE);
+//        bbCommunication.connectBT(SchemeActivity.this);
+//        if(startEmvResult != BBPosCallback.SUCCESS)
+//        {
+//            switch (startEmvResult)
+//            {
+//                case BBPosCallback.FAILED:
+//                    loadParametersUsage();
+//                    //exit("load_params_required");//pay
+//                    break;
+//                case BBPosCallback.BT_DISCONNECTED:
+//                    j.b("launchTransaction","BT_DISCONNECTEd SENT");
+//                    exit("bt_disconnected");//pay
+//                    break;
+//            }
+//        }
+
+        /*
+
+
+         */
     }
     private void convertHostWithoutLunch(String hostLink) {
         HashMap<String,String> hashMap = new HashMap<>();
@@ -1153,6 +1317,7 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                         case LoadParamsCallback.LOAD_PARAM_FAILED:
                          //  //Toast.makeText(MainActivity.this, "Load Failed - Prompt Dialog Yes - No #NOTE: do not open load params again so it wont stuck in a loop", //Toast.LENGTH_SHORT).show();
                             exit("load_param_failed");
+                            Log.d(TAG, "onParamLoaded: 15");
                             break;
                         case LoadParamsCallback.LOAD_PARAM_SUCCESS:
                             exit("load_param_success");
@@ -1188,31 +1353,44 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
     }
     private boolean SEND_BT_RESPONSE = true;
     @Override
-    public void onBTResponse(byte statusCode, String data) {
-        if(SEND_BT_RESPONSE) {
-            switch (statusCode) {
-                case BBUtilCallBacks.BT_CONNECTED:
-                    SERIAL_NUMBER = data;
-                    ((TextView) findViewById(R.id.current_version)).setText(data);
-                    if (lastAction.equals("connectBT")) {
-                        isSuccess = true;
-                        exit(data);//connectBt
+        public void onBTResponse(byte statusCode, String data) {
+        Log.d("onBTResponse" , "statusCode = ["+statusCode + "], data = [" +data + "]" );
+        Log.e(TAG, "onBTResponse: IS_TRANSCTION_SENT -> [" + IS_TRANSCTION_SENT  + "]");
+        Log.e(TAG, "onBTResponse: Try -> [" + RE_CONNECT_TRIES + "/" +MAX_TRIES  +"]");
+        bbCommunication.updateToken(getTokenToMemory(TOKEN_TAG,""));
+            if(SEND_BT_RESPONSE) {
+                switch (statusCode) {
+                    case BBUtilCallBacks.BT_CONNECTED:
+                        SERIAL_NUMBER = data;
+                        ((TextView) findViewById(R.id.current_version)).setText(data);
+                        if (lastAction.equals("connectBT")) {
+                            isSuccess = true;
+                            exit(data);//connectBt
 
-                        return;
-                    }
+                            return;
+                        }else if (lastAction.equals("pay")) {
+                            if(IS_TRANSCTION_SENT){
 
-                    //getTokenFromServer(SERIAL_NUMBER);
-                    break;
-                case BBUtilCallBacks.BT_DISCONNECTED:
-                    ((TextView) findViewById(R.id.current_version)).setText("מנותק");
-                    break;
-                case BBUtilCallBacks.BT_FAILD_START:
-                    ((TextView) findViewById(R.id.current_version)).setText("מנותק.");
-                    exit("failed_to_connect_bt");
 
-                    break;
+                                launchTransction(CURRENT_PAY);
+                            }else{
+                                exit("bt_disconnected");
+                            }
+                        }
+
+                        //getTokenFromServer(SERIAL_NUMBER);
+                        break;
+                    case BBUtilCallBacks.BT_DISCONNECTED:
+                        ((TextView) findViewById(R.id.current_version)).setText("מנותק");
+
+                        break;
+                    case BBUtilCallBacks.BT_FAILD_START:
+                        ((TextView) findViewById(R.id.current_version)).setText("מנותק.");
+                        exit("failed_to_connect_bt");
+
+                        break;
+                }
             }
-        }
     }
 
 
@@ -1243,6 +1421,7 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                                         case LoadParamsCallback.LOAD_PARAM_FAILED:
                                             ////Toast.makeText(MainActivity.this, "Load Param Couldnt load try again! Dialog - Yes / No #NOTE Not automatically so it wont be stuck in a loop", //Toast.LENGTH_SHORT).show();
                                             exit("load_param_failed");
+                                            Log.d(TAG, "onParamLoaded: 16");
                                             break;
                                         case LoadParamsCallback.LOAD_PARAM_SUCCESS:
                                             exit("load_param_success");
@@ -1394,44 +1573,63 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
     }
     private static String failedUrl = null;
     private static String successURL = null;
+    private static boolean flag = false;
+
     @Override
     public void onBackPressed() {
-
-        //super.onBackPressed();
-        SEND_BT_RESPONSE = false;
-        disconnectBt();
-        exit("user_back_pressed");
-    }
-
-
-    private boolean isSuccess = false;
-    private String lastAction = "";
-    private void exit(String results){
-        //Log.e(TAG, "convertHost3: " + successURL + ", " + failedUrl );
-        Log.e(TAG, "exit:  CLOUD ["  + lastAction + "], [" + results + "]");
+        clearActivity();
+//        try {
+//            super.onBackPressed();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+            String results = OVERRIDE_RES;
+            //Log.e(TAG, "convertHost3: " + successURL + ", " + failedUrl );
+            Log.e(TAG, "exit:  CLOUD ["  + lastAction + "], [" + results + "]");
             // BroadCastReceiver
-            final Intent intent=new Intent();
+            Intent intent = new Intent(this, SchemeActivity.class);
             intent.setAction("example.cloudpos_bbpos");
             intent.putExtra("action",lastAction);
             intent.putExtra("result",results);
             intent.putExtra("status",isSuccess);
-            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+            if(sameTab.equalsIgnoreCase("True")) {
+                intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+            }
             Log.e(TAG, "exit:  >>" + getPackageName() + "." + SchemeActivity.class.getSimpleName() );
             Log.e(TAG, "action:  >>" + lastAction);
             Log.e(TAG, "status:  >>" + isSuccess );
-
-
             sendBroadcast(intent);
 
             //URL SCHEME results => "?results" +
             if(successURL == null){
                 successURL = "";
+            }else if(successURL.equalsIgnoreCase(CLOSED_APP)){
+                //finish();
+                clearActivity();
+                return;
             }
+            //sameTab
 
             if(failedUrl == null){
                 failedUrl = "";
             }
-            String results_scheme = ((isSuccess)?successURL:failedUrl) +"?action=" + lastAction +"&results=" + Uri.encode(results);
+            String undecode_base_url =((isSuccess)?successURL:failedUrl);
+            String base_url = undecode_base_url;
+            Log.e(TAG, "exit: results_scheme->Failed/Success : " + base_url );
+            try {
+                base_url = URLDecoder.decode(undecode_base_url, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+//            try {
+//                base_url = URLDecoder.decode(base_url, "UTF-8");
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
+//            }
+
+
+            String prefix = ((base_url.contains("?"))?"&": "?");
+            String results_scheme = base_url + prefix +"action=" + lastAction +"&results=" + Uri.encode(results);
             Log.e(TAG, "exit:  results_scheme ["  + results_scheme + "]");
             Log.e(TAG, "exit:  results_scheme - encode ["  + Uri.encode(results) + "]");
             Log.e(TAG, "exit:  results_scheme - parse ["  + Uri.parse(results) + "]");
@@ -1440,21 +1638,63 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
 
             //StartActivity for result
             result.putExtra(lastAction, results);
-            result.putExtra(Browser.EXTRA_APPLICATION_ID, "com.android.chrome");
-            result.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if(sameTab.equalsIgnoreCase("True")) {
+                result.putExtra(Browser.EXTRA_APPLICATION_ID, "com.android.chrome");
+                result.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            }
+            result.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    | Intent.FLAG_ACTIVITY_NO_ANIMATION
+            );
             setResult(Activity.RESULT_OK, result);
             successURL = null;
             failedUrl = null;
+
             try{
                 startActivity(result);
-                overridePendingTransition(0,0);
+//                clearActivity();
             }catch (Exception e){
                 Toast.makeText(this, "No Activity found to handle Intent {dat="+results_scheme+" (has extras) }", Toast.LENGTH_LONG).show();
                 Log.e(APP_TAG, "exit: " + "No Activity found to handle Intent {dat="+results_scheme+" (has extras) }" );
                 Log.e(APP_TAG, "exit: " + "No Activity found to handle Intent {failUrl=["+failedUrl+"], succUrl=[" + successURL +"]}");
                 e.printStackTrace();
             }
-        finish();
+            clearActivity();
+        if(FORCE_CLEAR) {
+            super.onBackPressed();
+        }
+    }
+
+    private void clearActivity(){
+        safeExit();
+        overridePendingTransition(0, 0);
+    }
+
+    private boolean isSuccess = false;
+    private String lastAction = "";
+    private String OVERRIDE_RES = "";
+    private void exit(String results){
+        OVERRIDE_RES = results ;
+        onBackPressed();
+
+    }
+
+    public void safeExit2() {
+        int pid = android.os.Process.myPid();
+        android.os.Process.killProcess(pid);
+        System.exit(0);
+    }
+
+
+    private void safeExit(){
+        if(Build.VERSION.SDK_INT>=17 && Build.VERSION.SDK_INT<21){
+            finishAffinity();
+        } else if(Build.VERSION.SDK_INT>=21){
+            finishAndRemoveTask();
+        }
+        overridePendingTransition(0,0);
     }
 
     @Override
@@ -1462,7 +1702,7 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
         Log.e(TAG, "convertHost2: " + successURL + ", " + failedUrl );
         if (requestCode == RESULT_CODE) {
             if(resultCode == Activity.RESULT_OK){
-                String results = data.getStringExtra(TranManagerActivity.EXTRA_RESULT);
+                final String results = data.getStringExtra(TranManagerActivity.EXTRA_RESULT);
                 if(!results.equals("")) {
 
 
@@ -1470,8 +1710,19 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                     Log.d(APP_TAG, "onActivityResult: " + data.getStringExtra(TranManagerActivity.EXTRA_RESULT));
                     ((TextView) findViewById(R.id.text_results)).setText(StringUtil.formatJsonString(data.getStringExtra(TranManagerActivity.EXTRA_RESULT)));
                     isSuccess = true;
-                    exit(results);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            FORCE_CLEAR = true;
+                            exit(results);
+                        }
+                    }, 100);
+
+
+
+
                 }else{
+                    FORCE_CLEAR = true;
                     exit("user_back_pressed");
                 }
             }
@@ -1502,10 +1753,12 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                         Log.d("[PAYMENT_PAGE]", " ---SUCCESS--- " + result1);
                         //Toast.makeText(this, "Success " + result1, Toast.LENGTH_SHORT).show();
                         isSuccess = true;
+                        FORCE_CLEAR = true;
                         exit(result2);
                         break;
                     case "user_back_pressed":
                         Log.d("[PAYMENT_PAGE]", " ---user_back_pressed--- " + result1);
+                        FORCE_CLEAR = true;
                         exit(result1);
                         break;
                     default:
@@ -1544,21 +1797,39 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
         }else{
             hash.putAll(tranHash);
         }
-        int startEmvResult = bbCommunication.startAmount(SchemeActivity.this, hash, RESULT_CODE);
-        if(startEmvResult != BBPosCallback.SUCCESS)
-        {
-            switch (startEmvResult)
-            {
-                case BBPosCallback.FAILED:
-                    ////Toast.makeText(this, "Need to load params!", //Toast.LENGTH_SHORT).show();
-                    loadParametersUsage();
-                    break;
-                case BBPosCallback.BT_DISCONNECTED:
-                    //Toast.makeText(this, "Bt is not connected", //Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
+        sendTransaction(hash);
     }
+    private static boolean IS_TRANSCTION_SENT;
+    private void sendTransaction(HashMap<String,String> hash){
+        j.b("sendTransaction","Started Transction from sendTransaction");
+        IS_TRANSCTION_SENT = false;
+        if(RE_CONNECT_TRIES<MAX_TRIES){
+            int startEmvResult = bbCommunication.startAmount(SchemeActivity.this, hash, RESULT_CODE);
+            if(startEmvResult != BBPosCallback.SUCCESS)
+            {
+                switch (startEmvResult)
+                {
+                    case BBPosCallback.FAILED:
+                        ////Toast.makeText(this, "Need to load params!", //Toast.LENGTH_SHORT).show();
+                        loadParametersUsage();
+                        break;
+                    case BBPosCallback.BT_DISCONNECTED:
+                        //Toast.makeText(this, "Bt is not connected", //Toast.LENGTH_SHORT).show();
+                        IS_TRANSCTION_SENT = true;
+                        RE_CONNECT_TRIES++;
+                        bbCommunication.connectBT(SchemeActivity.this);
+                        //exit("bt_disconnected");
+                        break;
+                }
+            }
+        }else{
+            exit("bt_disconnected");
+        }
+
+    }
+
+    private static final int MAX_TRIES = 3;
+    private static int RE_CONNECT_TRIES = 0;
     private void loadParametersFunction(LoadParamsCallback loadParamsCallback, boolean force)
     {
         //{1} Integer callback that state whether the Loading Activity has successfully opened or not.
@@ -1604,8 +1875,10 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                                 exit("user_back_pressed");
                             }
                         };
-                        setAlertContainerUI(true,R.string.retry, clickListenerV,true,R.string.cancel,clickListenerX,R.string.searchBt);
-                        */
+setAlertContainerUI(true,R.string.retry, clickListenerV,true,R.string.cancel,clickListenerX,R.string.searchBt);
+                         */
+                        Log.e(TAG, "onParamLoaded: 121212" );
+                        FORCE_CLEAR = true;
                         exit("user_back_pressed");
                         break;
                     case LoadParamsCallback.LOAD_PARAM_SUCCESS:
@@ -1649,6 +1922,7 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
                     SEND_BT_RESPONSE = false;
                     disconnectBt();
                     exit("user_back_pressed");
+
                 }
             };
             setAlertContainerUI(false,-1, null,true,R.string.cancel,clickListenerX,R.string.searchBt);
@@ -1681,4 +1955,28 @@ public class SchemeActivity extends Activity  implements View.OnClickListener,  
         }
         ((TextView)findViewById(R.id.msg)).setText(getResources().getString(title));
     }
+    private final int REQUEST_LOCATION_PERMISSION = 1;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+
+    }
+
+    @AfterPermissionGranted(REQUEST_LOCATION_PERMISSION)
+    public boolean requestLocationPermission() {
+        String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
+        if(EasyPermissions.hasPermissions(SchemeActivity.this, perms)) {
+            //Toast.makeText(this, "Permission already granted", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        else {
+            EasyPermissions.requestPermissions(SchemeActivity.this, "Please grant the location permission", REQUEST_LOCATION_PERMISSION, perms);
+            return false;
+        }
+    }
+
 }

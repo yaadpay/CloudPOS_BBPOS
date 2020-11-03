@@ -492,7 +492,8 @@ It means that the token that was provided is invalid or not provided at all.
     
 ### How my server will be notified with the transaction's result?
 There are two ways to be notified:
-- <strong> Server-To-Server: </strong> By passing in the initiate transaction Hash the yaadOb.notify and yaadObj.norifyUrl you can be notified directly from our server to the specific url you choose for the response. <strong>
+- <strong> Server-To-Server: </strong> By passing in the initiate transaction Hash the yaadOb.
+ and yaadObj.norifyUrl you can be notified directly from our server to the specific url you choose for the response. <strong>
    [Highly recommanded]</strong> 
 ```
    hash.put("yaadObj.notify", "url"); 

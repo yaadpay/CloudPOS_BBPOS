@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">SecurePay</string>
+    <string name="host_app_name">SecurePay</string>
     <string name="_bb_page_wel">Secure Pay Application,\n\n Please do not remove if you use one of our services.</string>
     <string name="searchBt">מחפש חיבור..</string>
     <string name="retry">נסה שנית</string>
+    <string name="title_location_permission">SecurePay הרשאות</string>
+    <string name="text_location_permission">על מנת להשתמש באפליקצייה יש לאשר את ההרשאה הבאה חד פעמי</string>
 </resources>

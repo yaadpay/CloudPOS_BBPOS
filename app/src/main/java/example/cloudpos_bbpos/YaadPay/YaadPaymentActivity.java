@@ -146,7 +146,7 @@ public class YaadPaymentActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onBackPressed() {
-      //  super.onBackPressed();
+      //  super.finish();
         exit("user_back_pressed");
     }
 
@@ -423,6 +423,9 @@ public class YaadPaymentActivity extends AppCompatActivity implements View.OnCli
         }
 
         setResult(-1, intent);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Will clear out your activity history stack till now
+        intent.putExtra("Exit me", true);
+
         finish();
     }
 

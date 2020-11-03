@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
 
         if(data != null){
 
-            Toast.makeText(this, "STARTED" + getIntent().getDataString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "STARTED" + getIntent().getDataString(), Toast.LENGTH_SHORT).show();
             try{
 
                 ((TextView)findViewById(R.id.text1)).setText(getIntent().getDataString());
@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
                         } else if (status.equals(STATUS_FAILED)) {
                             //Prompt message error
                             Log.e(TAG, "run: " + +0 );
-                            Toast.makeText(MainActivity.this, data, Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, data, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -409,7 +409,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
     @Override
     public void onBackPressed() {
 
-        //super.onBackPressed();
+        //super.finish();
         exit("DONE-");
     }
 
@@ -424,11 +424,13 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         final Intent intent=new Intent();
         intent.setAction("example.cloudpos_bbpos");
         intent.putExtra("RES",results);
-        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+//       if(SchemeActivity.sameTab.equalsIgnoreCase("True")) {
+//           intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+//       }
         Log.e(TAG, "exit:  >>" + getPackageName() + "." + MainActivity.class.getSimpleName() );
         sendBroadcast(intent);
-
-
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Will clear out your activity history stack till now
+        intent.putExtra("Exit me", true);
         finish();
     }
 
