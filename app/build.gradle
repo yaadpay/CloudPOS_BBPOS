@@ -6,15 +6,15 @@ android {
         applicationId "example.cloudpos_bbpos"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 27
-        versionName "1.0.27"
+        versionCode 29
+        versionName "1.0.29.s"
 
 
         useLibrary 'org.apache.http.legacy'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
-
+c
 
         android.applicationVariants.all { variant ->
             variant.outputs.all {

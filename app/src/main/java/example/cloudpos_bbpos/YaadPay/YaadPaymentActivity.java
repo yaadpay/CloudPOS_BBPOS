@@ -425,6 +425,9 @@ public class YaadPaymentActivity extends AppCompatActivity implements View.OnCli
         setResult(-1, intent);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Will clear out your activity history stack till now
         intent.putExtra("Exit me", true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
         finish();
     }
